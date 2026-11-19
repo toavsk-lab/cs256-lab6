@@ -4,7 +4,7 @@ course_string = ( "    MTH-111, Pre-calculus, 4, COMPLETED    ",
     "     GSWS-210, Violence Prevention, 4, completed"
   )
 
-gen_ed_mapping = {
+gen_ed_Categories = {
     "Creativity and Innovation": ["ART-133", "ART-291", "ENG-105", 
                                   "GSWS-210", "MUS-330"],
     "Communication and Expression": ["ARTH-204", "ARTH-205", "BA-450", 

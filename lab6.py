@@ -55,6 +55,31 @@ def get_gen_ed_category (course_code, gen_ed_mapping):
   # Return Uncategorized if the course is not found
   return "Uncategorized"
 
+def audit_credits(student_bins):
+  """
+  Calculates the total completed credits for each Gen Ed category
+
+  Params:
+  - student_bins (dict): A dictionary containing Gen Ed categories
+  and lists of course codes and credits
+
+  Returns (dict): A dictionary containing the total credits for each category
+  """
+
+  # Create a credit total of zero for each category
+  credit_totals = {}
+
+  # Initialize credit totals for each category
+  for category in student_bins:
+    credit_totals[category] = 0
+
+  # Calculate the total credits for each category
+  for category, course_list in student_bins.items():
+    for course_code, credits in course_list:
+      credit_totals[category] += credits
+
+  return credit_totals
+
 def main ():
 
   # Given Data
@@ -86,21 +111,27 @@ def main ():
 
 }
 
-  # Step 1: Test parsing course records
-  for course_string in transcript[:4]:
-    print(parse_course_record(course_string))
+  # # Step 1: Test parsing course records
+  # for course_string in transcript[:4]:
+  #   print(parse_course_record(course_string))
   
-  # Step 2: Test Gen Ed category lookup
+  # # Step 2: Test Gen Ed category lookup
 
-  for course_string in transcript:
-    course_record = parse_course_record(course_string)
+  # for course_string in transcript:
+  #   course_record = parse_course_record(course_string)
 
-    category = get_gen_ed_category(
-        course_record["code"],
-        gen_ed_categories
-    )
+  #   category = get_gen_ed_category(
+  #       course_record["code"],
+  #       gen_ed_categories
+  #   )
 
-    print(category)
+  #   print(category)
+  
+  # Step 3: Audit completed credits
+  student_bins = bin_student_courses(
+      transcript,
+      gen_ed_categories
+  )
 
 if __name__ == "__main__":
   main()

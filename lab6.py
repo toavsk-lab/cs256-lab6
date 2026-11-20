@@ -80,6 +80,49 @@ def audit_credits(student_bins):
 
   return credit_totals
 
+def bin_student_courses(transcript, gen_ed_mapping):
+  """
+  Groups completed courses into their Gen Ed categoris
+
+  params:
+  - transcript (tuple): A collection of string containing course records
+  - gen_ed_mapping (dict): A dictionary mapping course codes to categories
+
+  Returns (dict): Categoris containing lists of course codes and credits
+  """
+
+  student_bins = {}
+
+  # Create an empty list for each Gen Ed category
+  for category in gen_ed_mapping:
+    student_bins[category] = []
+
+  # Create an empty list for uncategorized courses
+  uncategorized = get_gen_ed_category ("", gen_ed_mapping)
+  student_bins[uncategorized] = []
+
+  # Process each course in the transcript
+  for course_string in transcript:
+    course_record = parse_course_record(course_string)
+
+    course_code = course_record["code"]
+    credits = course_record["credits"]
+    status = course_record["status"]
+
+    # Find the course's Gen Ed category
+    category = get_gen_ed_category(
+        course_code,
+        gen_ed_mapping
+      )
+
+    # Add the course code and credits to its category
+    student_bins[category].append(
+        (course_code, credits)
+    )
+
+  return student_bins
+
+
 def main ():
 
   # Given Data
@@ -126,12 +169,21 @@ def main ():
   #   )
 
   #   print(category)
-  
-  # Step 3: Audit completed credits
+
+  # # Step 3: Audit completed credits
+  # student_bins = bin_student_courses(
+  #     transcript,
+  #     gen_ed_categories
+  # )
+
+  # Step 4: Bin completed courses
   student_bins = bin_student_courses(
       transcript,
       gen_ed_categories
   )
+
+  for category, courses in student_bins.items():
+    print(f"{category}: {courses}")
 
 if __name__ == "__main__":
   main()
